@@ -25,14 +25,13 @@ router.route("/").get((req, res) => {
 
       // push food data's name into foodlist
       const type = await typeShema.findById(f.idtype);
+      const image = await imageShema.findById(f.idimage);
       foodList.push({
         name: f.name,
         price: f.price,
         type: type.name,
         subtype: subtypeList,
-        image: async (idimage) => {
-          return await imageShema.findById(idimage);
-        },
+        image: image.img,
       });
     });
     //show data food without objectid

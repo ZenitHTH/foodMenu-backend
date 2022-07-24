@@ -32,18 +32,18 @@ router
             price:pricefood
         }
     */
-    function imagefetch() {
+    async function imagefetch() {
       const img = fs.readFileSync(req.file.path);
       const encode_img = img.toString("base64");
       const schemaImg = {
-        name: req.body.name,
-        path: req.body.path,
+        name: req.file.filename,
         img: {
           contentType: req.file.mimetype,
           data: Buffer.from(encode_img, "base64"),
         },
       };
-      return imageSchema.create(schemaImg, (err, result) => {
+
+      imageSchema.create(schemaImg, (err, result) => {
         if (err) {
           console.log(err);
         } else {
@@ -51,25 +51,38 @@ router
           fs.unlink(req.file.path, (err) => {
             if (err) console.log(err);
           });
-          return result._id;
         }
       });
     }
-    const foodShemaModel = {
-      name: req.body.namefood,
-      price: req.body.pricefood,
-      idtype: req.body.idtype,
-      idsubtype: req.body.idsubtype,
-      idimage: imagefetch(),
-    };
+    imagefetch().then(async () => {
+      var findidbyname = function (name, done) {
+        imageSchema.findOne({ name }, (err, result) => {
+          if (err) {
+            console.log(err);
+          } else {
+            done(null, result);
+          }
+        });
+      };
+      findidbyname(req.file.filename, (err, result) => {
+        console.log(result._id);
+        const foodShemaModel = {
+          name: req.body.namefood,
+          price: req.body.pricefood,
+          idtype: req.body.idtype,
+          idsubtype: req.body.idsubtype,
+          idimage: result._id,
+        };
 
-    await foodShema.create(foodShemaModel, (err, data) => {
-      if (err) {
-        console.log(err);
-      } else {
-        res.json(data);
-        res.status(201).end();
-      }
+        foodShema.create(foodShemaModel, (err, data) => {
+          if (err) {
+            console.log(err);
+          } else {
+            res.json(data);
+            res.status(201).end();
+          }
+        });
+      });
     });
   })
   .get((req, res, next) => {
