@@ -1,5 +1,5 @@
 {
-  "name": "backend",
+  "name": "foodmenu-backend",
   "version": "1.0.0",
   "description": "backend for foodmenu system",
   "main": "app.js",
@@ -16,7 +16,6 @@
     "express-session": "^1.17.3",
     "json": "^11.0.0",
     "mongoose": "^6.3.8",
-    "multer": "^1.4.5-lts.1",
     "multer-gridfs-storage": "^5.0.2",
     "nodemon": "^2.0.16",
     "vimspector-config": "^1.1.1"
