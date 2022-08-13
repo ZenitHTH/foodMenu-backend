@@ -4,6 +4,7 @@ const router = express.Router();
 const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
+const uuid = require("uuid");
 
 const foodShema = require("../models/food.db");
 const imageSchema = require("../models/image.db");
@@ -13,7 +14,7 @@ const storage = multer.diskStorage({
     cb(null, "uploads");
   },
   filename: (req, file, cb) => {
-    cb(null, file.fieldname + "-" + Date.now());
+    cb(null, `${uuid.v4()}.${file.mimetype.split("/")[1]}`);
   },
 });
 const upload = multer({ storage });
@@ -35,12 +36,15 @@ router
     async function imagefetch() {
       const img = fs.readFileSync(req.file.path);
       const encode_img = img.toString("base64");
+      // const schemaImg = {
+      //   name: req.file.filename,
+      //   img: {
+      //     contentType: req.file.mimetype,
+      //     data: Buffer.from(encode_img, "base64"),
+      //   },
+      // };
       const schemaImg = {
-        name: req.file.filename,
-        img: {
-          contentType: req.file.mimetype,
-          data: Buffer.from(encode_img, "base64"),
-        },
+        name:req.file.filename
       };
 
       imageSchema.create(schemaImg, (err, result) => {
@@ -48,9 +52,6 @@ router
           console.log(err);
         } else {
           console.log("Saved Photo to database");
-          fs.unlink(req.file.path, (err) => {
-            if (err) console.log(err);
-          });
         }
       });
     }

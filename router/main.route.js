@@ -20,14 +20,13 @@ router.route("/").get(async (req, res) => {
           subtypeList.push(subtype.name);
         });
         const type = await typeShema.findById(f.idtype);
-        const image = await imageShema.findById(f.idimage);
 
         foodList.push({
           name: f.name,
           price: f.price,
           type: type.name,
           subtype: subtypeList,
-          image: image.img,
+          image: f.idimage,
         });
       })
     ).then(() => {
