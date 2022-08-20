@@ -10,6 +10,8 @@ const typeRoute = require("./router/type.route");
 const subtypeRoute = require("./router/subtype.route");
 const mainRoute = require("./router/main.route");
 const imageRoute = require("./router/image.route");
+const loginRoute = require("./router/login.route");
+const registerRoute = require("./router/register.route");
 
 //MongoDB
 mongoose.Promise = global.Promise;
@@ -36,7 +38,9 @@ app.use("/", mainRoute);
 app.use("/type", typeRoute);
 app.use("/subtype", subtypeRoute);
 app.use("/food", foodRoute);
-app.use("/image",imageRoute)
+app.use("/image",imageRoute);
+app.use("/login",loginRoute);
+app.use("/register",registerRoute);
 
 //Server config
 const port = process.env.port || 4000;
