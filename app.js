@@ -12,12 +12,17 @@ const mainRoute = require("./router/main.route");
 const imageRoute = require("./router/image.route");
 const loginRoute = require("./router/login.route");
 const registerRoute = require("./router/register.route");
+const { db } = require("./models/user.db");
 
 //MongoDB
 mongoose.Promise = global.Promise;
 //conecting DB
 mongoose
-  .connect(dbConfig.db, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(dbConfig.db, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    
+  })
   .then(
     () => {
       console.log("Connect DB Sucessful.");
@@ -38,9 +43,9 @@ app.use("/", mainRoute);
 app.use("/type", typeRoute);
 app.use("/subtype", subtypeRoute);
 app.use("/food", foodRoute);
-app.use("/image",imageRoute);
-app.use("/login",loginRoute);
-app.use("/register",registerRoute);
+app.use("/image", imageRoute);
+app.use("/login", loginRoute);
+app.use("/register", registerRoute);
 
 //Server config
 const port = process.env.port || 4000;
