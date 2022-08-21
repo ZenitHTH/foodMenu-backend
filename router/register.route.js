@@ -30,15 +30,17 @@ router.route("/").post(async (req, res) => {
             username: username,
             passwordhash: hash
           });
-          console.log(`newUser:${newUser}`)
           const token = await jwt.sign(
             { user_id: newUser._id, username },
             process.env.TOKEN_KEY,
             { expiresIn: "1h" }
           );
-          console.log(token)
+          
           newUser.token = token;
-          res.status(200).json({username:newUser.username,_id:newUser._id}).end();
+          newUser.save()
+          console.log(`newUser:${newUser}`)
+          res.json({username:newUser.username,token:newUser.token});
+          res.status(200).end();
         });
       });
     } else {
